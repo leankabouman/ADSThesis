@@ -1,0 +1,763 @@
+###############################################################################
+# ADS Thesis
+# Leanka Bouman
+# 5982111
+###############################################################################
+# Handling missing data
+# Descriptives
+###############################################################################
+
+###############################################################################
+# Handeling missing data 
+###############################################################################
+
+# missings pattern information rights
+md.pattern(df[, vars_info])
+
+# missings pattern influence rights
+md.pattern(df[, vars_dec])
+
+# missings pattern attitudes
+md.pattern(df[, vars_att])
+
+# missings pattern all variables
+missing_pattern <- as.data.frame(md.pattern(df[, vars]))
+
+# Correlation between variables
+cor(df[, c(vars_info, vars_dec)], method='spearman', use='pairwise.complete.obs')
+# APA correlation table
+
+# Handling missings using Multiple Imputation 
+# Using MICE
+
+# Setting all ordinal/categorical variables to ordered/factor variables
+df[,vars] <- lapply(df[,vars], ordered) #ER variables
+df$size_10 <- as.ordered(df$size_10) #company size
+df$sec3 <- as.factor(df$sec3) #sector
+df$country2 <- as.factor(df$country2) #sector
+df[,c("ER202", "ER151_1", "ER151_2")] <- lapply(
+      df[,c("ER202", "ER151_1", "ER151_2")], ordered)
+df[,c("ER203", "ER304")] <- lapply(df[,c("ER203", "ER304")], factor)
+
+df <- remove_val_labels(df)
+df <- remove_var_label(df)
+
+# Correlations with other predictor variables
+cor(df[, c(vars, "ER151_1", "ER151_2", "ER202", "ER203", "ER304", "ER501")],
+    method = 'spearman', use='pairwise.complete')
+
+# Create empty imputation for prediction matrix and setting methods
+set.seed(123)
+imp <- mice(df, maxit=0)
+
+# look at predictor matrix
+predictors <- quickpred(df)
+predictors
+
+
+# Define methods
+meth <- imp$method
+meth
+# All methods are correct for all variables
+
+# Perform multiple imputation
+set.seed(123)
+imp2 <- mice(df, # data to impute
+             m = 10, # amount of datasets to create
+             maxit = 5, # iterations
+             pred = predictors, # use predictors as found in the quickpred
+             method = meth, # method to use for variables
+             print =  TRUE) # seeing the iterations
+
+###############################################################################
+# Visualisation of imputed value
+###############################################################################
+
+# Visualize convergence
+plot(imp2)
+
+# Visualize distributions
+color_palette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                   "#0072B2", "#D55E00", "#CC79A7", "#000000", "#F00000")
+
+
+########################
+# ER200_1
+########################
+# Create dataframe for imputed values
+df_ER200_1 <- as.data.frame(imp2$imp$ER200_1)
+df_ER200_1 <- mutate(df_ER200_1, id = row_number())
+# make one long table
+df_ER200_1 <- gather(df_ER200_1, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER200_1, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER200_1_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER200_1)), aes(x=ER200_1)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER200_1_real.eps")
+
+
+########################
+# ER200_2
+########################
+# Create dataframe for imputed values
+df_ER200_2 <- as.data.frame(imp2$imp$ER200_2)
+df_ER200_2 <- mutate(df_ER200_2, id = row_number())
+# make one long table
+df_ER200_2 <- gather(df_ER200_2, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER200_2, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER200_2_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER200_2)), aes(x=ER200_2)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER200_2_real.eps")
+
+
+########################
+# ER207_1
+########################
+# Create dataframe for imputed values
+df_ER207_1 <- as.data.frame(imp2$imp$ER207_1)
+df_ER207_1 <- mutate(df_ER207_1, id = row_number())
+# make on4 long table
+df_ER207_1 <- gather(df_ER207_1, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_1, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_1_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_1)), aes(x=ER207_1)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_1_real.eps")
+
+########################
+# ER207_2
+########################
+# Create dataframe for imputed values
+df_ER207_2 <- as.data.frame(imp2$imp$ER207_2)
+df_ER207_2 <- mutate(df_ER207_2, id = row_number())
+# make on4 long table
+df_ER207_2 <- gather(df_ER207_2, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_2, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_2_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_2)), aes(x=ER207_2)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_2_real.eps")
+
+
+########################
+# ER207_3
+########################
+# Create dataframe for imputed values
+df_ER207_3 <- as.data.frame(imp2$imp$ER207_3)
+df_ER207_3 <- mutate(df_ER207_3, id = row_number())
+# make one long table
+df_ER207_3 <- gather(df_ER207_3, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_3, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_3_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_3)), aes(x=ER207_3)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_3_real.eps")
+
+
+########################
+# ER207_4
+########################
+# Create dataframe for imputed values
+df_ER207_4 <- as.data.frame(imp2$imp$ER207_4)
+df_ER207_4 <- mutate(df_ER207_4, id = row_number())
+# make one long table
+df_ER207_4 <- gather(df_ER207_4, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_4, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_4_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_4)), aes(x=ER207_4)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_4_real.eps")
+
+
+########################
+# ER207_5
+########################
+# Create dataframe for imputed values
+df_ER207_5 <- as.data.frame(imp2$imp$ER207_5)
+df_ER207_5 <- mutate(df_ER207_5, id = row_number())
+# make one long table
+df_ER207_5 <- gather(df_ER207_5, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_5, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_5_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_5)), aes(x=ER207_5)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_5_real.eps")
+
+########################
+# ER207_6
+########################
+# Create dataframe for imputed values
+df_ER207_6 <- as.data.frame(imp2$imp$ER207_6)
+df_ER207_6 <- mutate(df_ER207_6, id = row_number())
+# make one long table
+df_ER207_6 <- gather(df_ER207_6, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_6, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_6_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_6)), aes(x=ER207_6)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_6_real.eps")
+
+
+########################
+# ER207_8
+########################
+# Create dataframe for imputed values
+df_ER207_8 <- as.data.frame(imp2$imp$ER207_8)
+df_ER207_8 <- mutate(df_ER207_8, id = row_number())
+# make one long table
+df_ER207_8 <- gather(df_ER207_8, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER207_8, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER207_8_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER207_8)), aes(x=ER207_8)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER207_8_real.eps")
+
+
+########################
+# ER151_3
+########################
+# Create dataframe for imputed values
+df_ER151_3 <- as.data.frame(imp2$imp$ER151_3)
+df_ER151_3 <- mutate(df_ER151_3, id = row_number())
+# make one long table
+df_ER151_3 <- gather(df_ER151_3, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER151_3, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER151_3_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER151_3)), aes(x=ER151_3)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER151_3_real.eps")
+
+
+########################
+# ER151_4
+########################
+# Create dataframe for imputed values
+df_ER151_4 <- as.data.frame(imp2$imp$ER151_4)
+df_ER151_4 <- mutate(df_ER151_4, id = row_number())
+# make one long table
+df_ER151_4 <- gather(df_ER151_4, imputation, value, 1:10)
+
+# plot distribution imputations
+ggplot(df_ER151_4, aes(x=value, fill = imputation)) +
+      geom_bar(position = 'dodge2') +
+      scale_fill_manual(values = color_palette) +
+      theme_minimal()
+ggsave("ER151_4_imp.eps")
+
+# plot distribution real data
+ggplot(subset(df, !is.na(ER151_4)), aes(x=ER151_4)) +
+      geom_bar(fill = "#0072B2") +
+      theme_minimal()
+ggsave("ER151_4_real.eps")
+
+###############################################################################
+# Creating new datasets with imputated data
+###############################################################################
+
+# Create dataset for each imputation
+imp_total <- complete(imp2, 'long')
+
+# Drop variables not needed for cluster analysis
+imp_total <- subset(imp_total, select = -c(sec3, size_10, ER501, ER202, ER151_1,
+                                           ER151_2, ER203, ER304))
+
+# Create seperate dataset for each imputation
+dfs <- split(imp_total, imp_total$.imp)
+df_1 <- as.data.frame(dfs[1])
+df_2 <- as.data.frame(dfs[2])
+df_3 <- as.data.frame(dfs[3])
+df_4 <- as.data.frame(dfs[4])
+df_5 <- as.data.frame(dfs[5])
+df_6 <- as.data.frame(dfs[6])
+df_7 <- as.data.frame(dfs[7])
+df_8 <- as.data.frame(dfs[8])
+df_9 <- as.data.frame(dfs[9])
+df_10 <-as.data.frame(dfs[10])
+
+# Create dataset with mean IC/union values and median for vars to interpret
+# Mean of IC & Union
+df_mean_total <- imp_total %>%
+      group_by(.id) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+# Set variables to numeric
+imp_total <- as.data.frame(lapply(imp_total, function(x )as.numeric(as.character(x))))
+df_median_total <- imp_total %>%
+      group_by(.id) %>%
+      summarise_at(vars, mode)
+
+# Combine datasets
+df_summary_total <- as.data.frame(merge(df_mean_total, df_median_total, by='.id'))
+df_summary_total$country2 <- df_1$country2
+
+###############################################################################
+# Descriptives of complete datasets
+###############################################################################
+
+# Function for mode
+mode <- function(codes){
+      uniq <- unique(codes)
+      uniq[which.max(tabulate(match(codes, uniq)))]
+}
+
+# Lists for variables per imputation
+names(df_1) <- gsub(pattern = "X1.", replacement = "", x = names(df_1))
+names(df_2) <- gsub(pattern = "X2.", replacement = "", x = names(df_2))
+names(df_3) <- gsub(pattern = "X3.", replacement = "", x = names(df_3))
+names(df_4) <- gsub(pattern = "X4.", replacement = "", x = names(df_4))
+names(df_5) <- gsub(pattern = "X5.", replacement = "", x = names(df_5))
+names(df_6) <- gsub(pattern = "X6.", replacement = "", x = names(df_6))
+names(df_7) <- gsub(pattern = "X7.", replacement = "", x = names(df_7))
+names(df_8) <- gsub(pattern = "X8.", replacement = "", x = names(df_8))
+names(df_9) <- gsub(pattern = "X9.", replacement = "", x = names(df_9))
+names(df_10) <- gsub(pattern = "X10.", replacement = "", x = names(df_10))
+
+#Imputation averaged dataset
+#Mean
+summary(df_summary_total)
+#SD
+sapply(df_summary_total[c('union', 'IC')], sd)
+#Mode
+sapply(df_summary_total[vars], median)
+#Distribution
+tab1(df_summary_total$ER200_1)
+tab1(df_summary_total$ER200_2)
+tab1(df_summary_total$ER207_1)
+tab1(df_summary_total$ER207_2)
+tab1(df_summary_total$ER207_3)
+tab1(df_summary_total$ER207_4)
+tab1(df_summary_total$ER207_5)
+tab1(df_summary_total$ER207_6)
+tab1(df_summary_total$ER207_8)
+tab1(df_summary_total$ER151_3)
+tab1(df_summary_total$ER151_4)
+
+
+#Imputation 1
+#Mean
+summary(df_1)
+#SD
+sapply(df_1[c('union', 'IC')], sd)
+#Mode
+sapply(df_1[vars], mode)
+#Distribution
+tab1(df_1$ER200_1, cum.percent = TRUE)
+tab1(df_1$ER200_2, cum.percent = TRUE)
+tab1(df_1$ER207_1, cum.percent = TRUE)
+tab1(df_1$ER207_2, cum.percent = TRUE)
+tab1(df_1$ER207_3, cum.percent = TRUE)
+tab1(df_1$ER207_4, cum.percent = TRUE)
+tab1(df_1$ER207_5, cum.percent = TRUE)
+tab1(df_1$ER207_6, cum.percent = TRUE)
+tab1(df_1$ER207_8, cum.percent = TRUE)
+tab1(df_1$ER151_3, cum.percent = TRUE)
+tab1(df_1$ER151_4, cum.percent = TRUE)
+
+###############################################################################
+# Descriptives imputation 1 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_1 <- as.data.frame(lapply(df_1, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_1 <- df_1 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_1 <- df_1 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt1 <- as.data.frame(merge(df_mean_1, df_median_1, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt1) <- df_cnt1$country2
+
+# Drop country column
+df_cnt1 <- subset(df_cnt1, select = -country2)
+# Set er variables to factor variables
+#df_cnt1[,vars] <- lapply(df_cnt1[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 2 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_2 <- as.data.frame(lapply(df_2, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_2 <- df_2 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_2 <- df_2 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt2 <- as.data.frame(merge(df_mean_2, df_median_2, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt2) <- df_cnt2$country2
+
+# Drop country column
+df_cnt2 <- subset(df_cnt2, select = -country2)
+# Set er variables to factor variables
+#df_cnt2[,vars] <- lapply(df_cnt2[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 3 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_3 <- as.data.frame(lapply(df_3, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_3 <- df_3 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_3 <- df_3 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt3 <- as.data.frame(merge(df_mean_3, df_median_3, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt3) <- df_cnt3$country2
+
+# Drop country column
+df_cnt3 <- subset(df_cnt3, select = -country2)
+# Set er variables to factor variables
+#df_cnt3[,vars] <- lapply(df_cnt3[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 1 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_4 <- as.data.frame(lapply(df_4, function(x) as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_4 <- df_4 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_4 <- df_4 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt4 <- as.data.frame(merge(df_mean_4, df_median_4, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt4) <- df_cnt4$country2
+
+# Drop country column
+df_cnt4 <- subset(df_cnt4, select = -country2)
+# Set er variables to factor variables
+#df_cnt4[,vars] <- lapply(df_cnt4[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 5 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_5 <- as.data.frame(lapply(df_5, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_5 <- df_5 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_5 <- df_5 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt5 <- as.data.frame(merge(df_mean_5, df_median_5, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt5) <- df_cnt5$country2
+
+# Drop country column
+df_cnt5 <- subset(df_cnt5, select = -country2)
+# Set er variables to factor variables
+#df_cnt5[,vars] <- lapply(df_cnt5[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 6 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_6 <- as.data.frame(lapply(df_6, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_6 <- df_6 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_6 <- df_6 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt6 <- as.data.frame(merge(df_mean_6, df_median_6, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt6) <- df_cnt6$country2
+
+# Drop country column
+df_cnt6 <- subset(df_cnt6, select = -country2)
+# Set er variables to factor variables
+#df_cnt6[,vars] <- lapply(df_cnt6[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 7 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_7 <- as.data.frame(lapply(df_7, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_7 <- df_7 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_7 <- df_7 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt7 <- as.data.frame(merge(df_mean_7, df_median_7, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt7) <- df_cnt7$country2
+
+# Drop country column
+df_cnt7 <- subset(df_cnt7, select = -country2)
+# Set er variables to factor variables
+#df_cnt7[,vars] <- lapply(df_cnt7[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 8 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_8 <- as.data.frame(lapply(df_8, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_8 <- df_8 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_8 <- df_8 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt8 <- as.data.frame(merge(df_mean_8, df_median_8, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt8) <- df_cnt8$country2
+
+# Drop country column
+df_cnt8 <- subset(df_cnt8, select = -country2)
+# Set er variables to factor variables
+#df_cnt8[,vars] <- lapply(df_cnt8[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 9 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_9 <- as.data.frame(lapply(df_9, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_9 <- df_9 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_9 <- df_9 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt9 <- as.data.frame(merge(df_mean_9, df_median_9, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt9) <- df_cnt9$country2
+
+# Drop country column
+df_cnt9 <- subset(df_cnt9, select = -country2)
+# Set er variables to factor variables
+#df_cnt9[,vars] <- lapply(df_cnt9[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation 10 grouped by country
+###############################################################################
+
+# Set all variables to numeric
+df_10 <- as.data.frame(lapply(df_10, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_10 <- df_10 %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_10 <- df_10 %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt10 <- as.data.frame(merge(df_mean_10, df_median_10, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt10) <- df_cnt10$country2
+
+# Drop country column
+df_cnt10 <- subset(df_cnt10, select = -country2)
+# Set er variables to factor variables
+#df_cnt10[,vars] <- lapply(df_cnt10[,vars], ordered)
+
+###############################################################################
+# Descriptives imputation datasets grouped by country
+###############################################################################
+
+dataframes <- c(df_cnt1, df_cnt2, df_cnt3, df_cnt4, df_cnt5, df_cnt6, df_cnt7, 
+                df_cnt8, df_cnt9, df_cnt10)
+
+# Descriptives for each imputation dataset per country
+lapply(dataframes, summary)
+
+#SD for ic and union
+lapply(dataframes, sd)
+
+summary(df_cnt10)
+
+
+###############################################################################
+# Descriptives averaged dataset by country
+###############################################################################
+
+# Set all variables to numeric
+df_summary_total <- as.data.frame(lapply(df_summary_total, function(x )as.numeric(as.character(x))))
+
+# Mean of IC & Union
+df_mean_sum <- df_summary_total %>%
+      group_by(country2) %>%
+      summarise_at(c('IC', 'union'), mean)
+
+# Median for ER variables
+df_median_sum <- df_summary_total %>%
+      group_by(country2) %>%
+      summarise_at(vars, median)
+
+# Combine datasets
+df_cnt_sum <- as.data.frame(merge(df_mean_sum, df_median_sum, by='country2'))
+
+# Setting countries as row names
+rownames(df_cnt_sum) <- df_cnt_sum$country2
+
+# Drop country column
+df_cnt_sum <- subset(df_cnt_sum, select = -country2)
+df_cnt_sum
+
+summary(df_cnt_sum)
+sd(df_cnt_sum$IC)
+sd(df_cnt_sum$union)
