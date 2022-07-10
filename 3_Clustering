@@ -1,0 +1,922 @@
+###############################################################################
+# ADS Thesis
+# Leanka Bouman
+# 5982111
+###############################################################################
+# Cluster analysis
+# Visualisations of results
+###############################################################################
+
+###############################################################################
+# Cluster analysis imputation 1
+###############################################################################
+
+#set vars to ordered
+df_cnt1[,vars] <- lapply(df_cnt1[,vars], ordered)
+
+# calculate gower distance
+gower1 <- daisy(df_cnt1, metric = 'gower')
+summary(gower1)
+
+# Check most similar and dissimilar pair
+gower_mat1 <- as.matrix(gower1)
+
+
+# Determining amount of clusters with silhouette width
+sil1 <- list()
+objective1 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower1,
+                     diss = TRUE,
+                     k = i)
+      sil1[i] <- pam_fit$silinfo$avg.width
+      objective1[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil1),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 1")
+lines(2:9, unlist(sil1))
+
+
+###############################################################################
+# Cluster analysis imputation 2
+###############################################################################
+
+#set vars to ordered
+df_cnt2[,vars] <- lapply(df_cnt2[,vars], ordered)
+
+# calculate gower distance
+gower2 <- daisy(df_cnt2, metric = 'gower')
+summary(gower2)
+
+# Check most similar and dissimilar pair
+gower_mat2 <- as.matrix(gower2)
+
+# Determining amount of clusters with silhouette width
+sil2 <- list()
+objective2 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower2,
+                     diss = TRUE,
+                     k = i)
+      sil2[i] <- pam_fit$silinfo$avg.width
+      objective2[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil2),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 2")
+lines(2:9, unlist(sil2))
+# two clusters would be best/ most interesting
+
+
+###############################################################################
+# Cluster analysis imputation 3
+###############################################################################
+
+#set vars to ordered
+df_cnt3[,vars] <- lapply(df_cnt3[,vars], ordered)
+
+# calculate gower distance
+gower3 <- daisy(df_cnt3, metric = 'gower')
+summary(gower3)
+
+# Check most similar and dissimilar pair
+gower_mat3 <- as.matrix(gower3)
+
+# Determining amount of clusters with silhouette width
+sil3 <- list()
+objective3 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower3,
+                     diss = TRUE,
+                     k = i)
+      sil3[i] <- pam_fit$silinfo$avg.width
+      objective3[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil3),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 3")
+lines(2:9, unlist(sil3))
+# two clusters would be best/ most interesting
+
+
+###############################################################################
+# Cluster analysis imputation 4
+###############################################################################
+
+#set vars to ordered
+df_cnt4[,vars] <- lapply(df_cnt4[,vars], ordered)
+
+# calculate gower distance
+gower4 <- daisy(df_cnt4, metric = 'gower')
+summary(gower4)
+
+# Check most similar and dissimilar pair
+gower_mat4 <- as.matrix(gower4)
+
+# Determining amount of clusters with silhouette width
+sil4 <- list()
+objective4 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower4,
+                     diss = TRUE,
+                     k = i)
+      sil4[i] <- pam_fit$silinfo$avg.width
+      objective4[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil4),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 4")
+lines(2:9, unlist(sil4))
+
+
+###############################################################################
+# Cluster analysis imputation 5
+###############################################################################
+
+#set vars to ordered
+df_cnt5[,vars] <- lapply(df_cnt5[,vars], ordered)
+
+# calculate gower distance
+gower5 <- daisy(df_cnt5, metric = 'gower')
+summary(gower5)
+
+# Check most similar and dissimilar pair
+gower_mat5 <- as.matrix(gower5)
+
+
+# Determining amount of clusters with silhouette width
+sil5 <- list()
+objective5 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower5,
+                     diss = TRUE,
+                     k = i)
+      sil5[i] <- pam_fit$silinfo$avg.width
+      objective5[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil5),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 5")
+lines(2:9, unlist(sil5))
+
+
+###############################################################################
+# Cluster analysis imputation 6
+###############################################################################
+
+#set vars to ordered
+df_cnt6[,vars] <- lapply(df_cnt6[,vars], ordered)
+
+# calculate gower distance
+gower6 <- daisy(df_cnt6, metric = 'gower')
+summary(gower6)
+
+# Check most similar and dissimilar pair
+gower_mat6 <- as.matrix(gower6)
+
+
+# Determining amount of clusters with silhouette width
+sil6 <- list()
+objective6 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower6,
+                     diss = TRUE,
+                     k = i)
+      sil6[i] <- pam_fit$silinfo$avg.width
+      objective6[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil6),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 6")
+lines(2:9, unlist(sil6))
+
+
+###############################################################################
+# Cluster analysis imputation 7
+###############################################################################
+
+#set vars to ordered
+df_cnt7[,vars] <- lapply(df_cnt7[,vars], ordered)
+
+# calculate gower distance
+gower7 <- daisy(df_cnt7, metric = 'gower')
+summary(gower7)
+
+# Check most similar and dissimilar pair
+gower_mat7 <- as.matrix(gower7)
+
+
+# Determining amount of clusters with silhouette width
+sil7 <- list()
+objective7 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower7,
+                     diss = TRUE,
+                     k = i)
+      sil7[i] <- pam_fit$silinfo$avg.width
+      objective7[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil7),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 7")
+lines(2:9, unlist(sil7))
+
+###############################################################################
+# Cluster analysis imputation 8
+###############################################################################
+
+#set vars to ordered
+df_cnt8[,vars] <- lapply(df_cnt8[,vars], ordered)
+
+# calculate gower distance
+gower8 <- daisy(df_cnt8, metric = 'gower')
+summary(gower8)
+
+# Check most similar and dissimilar pair
+gower_mat8 <- as.matrix(gower8)
+
+
+# Determining amount of clusters with silhouette width
+sil8 <- list()
+objective8 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower8,
+                     diss = TRUE,
+                     k = i)
+      sil8[i] <- pam_fit$silinfo$avg.width
+      objective8[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil8),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 8")
+lines(2:9, unlist(sil8))
+
+
+###############################################################################
+# Cluster analysis imputation 9
+###############################################################################
+
+#set vars to ordered
+df_cnt9[,vars] <- lapply(df_cnt9[,vars], ordered)
+
+# calculate gower distance
+gower9 <- daisy(df_cnt9, metric = 'gower')
+summary(gower9)
+
+# Check most similar and dissimilar pair
+gower_mat9 <- as.matrix(gower9)
+
+
+# Determining amount of clusters with silhouette width
+sil9 <- list()
+objective9 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower9,
+                     diss = TRUE,
+                     k = i)
+      sil9[i] <- pam_fit$silinfo$avg.width
+      objective9[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil9),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 9")
+lines(2:9, unlist(sil9))
+
+
+###############################################################################
+# Cluster analysis imputation 10
+###############################################################################
+
+#set vars to ordered
+df_cnt10[,vars] <- lapply(df_cnt10[,vars], ordered)
+
+# calculate gower distance
+gower10 <- daisy(df_cnt10, metric = 'gower')
+summary(gower10)
+
+# Check most similar and dissimilar pair
+gower_mat10 <- as.matrix(gower10)
+
+
+# Determining amount of clusters with silhouette width
+sil10 <- list()
+objective10 <- list()
+set.seed(123)
+for(i in 2:9){
+      pam_fit <- pam(gower10,
+                     diss = TRUE,
+                     k = i)
+      sil10[i] <- pam_fit$silinfo$avg.width
+      objective10[i] <- pam_fit$objective[1]
+}
+
+# Plot sihouette width (higher is better)
+plot(2:9, unlist(sil10),
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width",
+     main = "Imputation 10")
+lines(2:9, unlist(sil10))
+
+
+###############################################################################
+# List of countries
+###############################################################################
+
+# Create country name list to add to visualisation
+countrylist = c("Bulgaria", "Czech Republic", "Estonia", "Latvia", "Lithuania",
+                "Hungary", "Poland", "Romania", "Slovenia", "Slovakia")
+
+###############################################################################
+# Cluster analysis imputation 1
+###############################################################################
+set.seed(123)
+pam_fit1 <- pam(gower1, diss = TRUE, k = 2)
+pam_fit1
+
+# Check mediods
+df_cnt1[pam_fit1$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt1$cluster <- as.ordered(pam_fit1$clustering)
+class(df_cnt1$cluster)
+
+# Visualizing clustering
+plot(pam_fit1)
+
+gower1
+tsne_obj1 <- Rtsne(gower1, is_distance = TRUE, perplexity = 3)
+
+tsne_data1 <- tsne_obj1$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit1$clustering),
+             feature1  = df_cnt1$IC,
+             feature2  = df_cnt1$union,
+             feature3  = df_cnt1$ER200_1,
+             feature4  = df_cnt1$ER200_2,
+             feature5  = df_cnt1$ER207_1,
+             feature6  = df_cnt1$ER207_2,
+             feature7  = df_cnt1$ER207_3,
+             feature8  = df_cnt1$ER207_4,
+             feature9 = df_cnt1$ER207_5,
+             feature10 = df_cnt1$ER207_6,
+             feature11 = df_cnt1$ER207_8,
+             feature12 = df_cnt1$ER151_3,
+             feature13 = df_cnt1$ER151_4,
+             country = countrylist)
+
+plot_imp1 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data1) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 1", x = 'Dimension 1', y = "Dimension 2") +
+  xlim(-18, 25) +
+  ylim(-15, 11)
+plot_imp1
+
+###############################################################################
+# Cluster analysis imputation 2
+###############################################################################
+set.seed(123)
+pam_fit2 <- pam(gower2, diss = TRUE, k = 2)
+pam_fit2
+
+# Check mediods
+df_cnt2[pam_fit2$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt2$cluster <- as.ordered(pam_fit2$clustering)
+class(df_cnt2$cluster)
+
+# Visualizing clustering
+plot(pam_fit2)
+
+gower2
+tsne_obj2 <- Rtsne(gower2, is_distance = TRUE, perplexity = 3)
+
+tsne_data2 <- tsne_obj2$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit2$clustering),
+             feature1  = df_cnt2$IC,
+             feature2  = df_cnt2$union,
+             feature3  = df_cnt2$ER200_1,
+             feature4  = df_cnt2$ER200_2,
+             feature5  = df_cnt2$ER207_1,
+             feature6  = df_cnt2$ER207_2,
+             feature7  = df_cnt2$ER207_3,
+             feature8  = df_cnt2$ER207_4,
+             feature9 = df_cnt2$ER207_5,
+             feature10 = df_cnt2$ER207_6,
+             feature11 = df_cnt2$ER207_8,
+             feature12 = df_cnt2$ER151_3,
+             feature13 = df_cnt2$ER151_4,
+             country = countrylist)
+
+library(ggrepel)
+
+plot_imp2 <- ggplot(aes(x = X, y = Y), data = tsne_data2) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 2", x = 'Dimension 1', y = "Dimension 2") +
+  xlim(-80, 60) +
+  ylim(-100, 80)
+plot_imp2
+
+###############################################################################
+# Cluster analysis imputation 3
+###############################################################################
+set.seed(123)
+pam_fit3 <- pam(gower3, diss = TRUE, k = 2)
+pam_fit3
+
+# Check mediods
+df_cnt3[pam_fit3$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt3$cluster <- as.ordered(pam_fit3$clustering)
+class(df_cnt3$cluster)
+
+# Visualizing clustering
+plot(pam_fit3)
+
+gower3
+tsne_obj3 <- Rtsne(gower3, is_distance = TRUE, perplexity = 3)
+
+tsne_data3 <- tsne_obj3$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit3$clustering),
+             feature1  = df_cnt3$IC,
+             feature2  = df_cnt3$union,
+             feature3  = df_cnt3$ER200_1,
+             feature4  = df_cnt3$ER200_2,
+             feature5  = df_cnt3$ER207_1,
+             feature6  = df_cnt3$ER207_2,
+             feature7  = df_cnt3$ER207_3,
+             feature8  = df_cnt3$ER207_4,
+             feature9 = df_cnt3$ER207_5,
+             feature10 = df_cnt3$ER207_6,
+             feature11 = df_cnt3$ER207_8,
+             feature12 = df_cnt3$ER151_3,
+             feature13 = df_cnt3$ER151_4,
+             country = countrylist)
+
+tsne_data3
+
+plot_imp3 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data3) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 3", x = 'Dimension 1', y = "Dimension 2") 
+
+plot_imp3
+
+###############################################################################
+# Cluster analysis imputation 4
+###############################################################################
+set.seed(123)
+pam_fit4 <- pam(gower4, diss = TRUE, k = 2)
+pam_fit4
+
+# Check mediods
+df_cnt4[pam_fit4$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt4$cluster <- as.ordered(pam_fit4$clustering)
+class(df_cnt4$cluster)
+
+# Visualizing clustering
+plot(pam_fit4)
+
+gower4
+tsne_obj4 <- Rtsne(gower4, is_distance = TRUE, perplexity = 3)
+
+tsne_data4 <- tsne_obj4$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit4$clustering),
+             feature1  = df_cnt4$IC,
+             feature2  = df_cnt4$union,
+             feature3  = df_cnt4$ER200_1,
+             feature4  = df_cnt4$ER200_2,
+             feature5  = df_cnt4$ER207_1,
+             feature6  = df_cnt4$ER207_2,
+             feature7  = df_cnt4$ER207_3,
+             feature8  = df_cnt4$ER207_4,
+             feature9 = df_cnt4$ER207_5,
+             feature10 = df_cnt4$ER207_6,
+             feature11 = df_cnt4$ER207_8,
+             feature12 = df_cnt4$ER151_3,
+             feature13 = df_cnt4$ER151_4,
+             country = countrylist)
+
+tsne_data4
+
+plot_imp4 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data4) +
+  geom_point(aes(shape = cluster), size =3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 4", x = 'Dimension 1', y = "Dimension 2") +
+  ylim(-250, 220)
+
+plot_imp4
+
+###############################################################################
+# Cluster analysis imputation 5
+###############################################################################
+set.seed(123)
+pam_fit5 <- pam(gower5, diss = TRUE, k = 2)
+pam_fit5
+
+# Check mediods
+df_cnt5[pam_fit5$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt5$cluster <- as.ordered(pam_fit5$clustering)
+class(df_cnt5$cluster)
+
+# Visualizing clustering
+plot(pam_fit5)
+
+gower5
+tsne_obj5 <- Rtsne(gower5, is_distance = TRUE, perplexity = 3)
+
+tsne_data5 <- tsne_obj5$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit5$clustering),
+             feature1  = df_cnt5$IC,
+             feature2  = df_cnt5$union,
+             feature3  = df_cnt5$ER200_1,
+             feature4  = df_cnt5$ER200_2,
+             feature5  = df_cnt5$ER207_1,
+             feature6  = df_cnt5$ER207_2,
+             feature7  = df_cnt5$ER207_3,
+             feature8  = df_cnt5$ER207_4,
+             feature9 = df_cnt5$ER207_5,
+             feature10 = df_cnt5$ER207_6,
+             feature11 = df_cnt5$ER207_8,
+             feature12 = df_cnt5$ER151_3,
+             feature13 = df_cnt5$ER151_4,
+             country = countrylist)
+
+tsne_data5
+
+plot_imp5 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data5) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 5", x = 'Dimension 1', y = "Dimension 2") +
+  ylim(-70, 60)
+
+plot_imp5
+
+###############################################################################
+# Cluster analysis imputation 6
+###############################################################################
+set.seed(123)
+pam_fit6 <- pam(gower6, diss = TRUE, k = 2)
+pam_fit6
+
+# Check mediods
+df_cnt6[pam_fit6$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt6$cluster <- as.ordered(pam_fit6$clustering)
+class(df_cnt6$cluster)
+
+# Visualizing clustering
+plot(pam_fit6)
+
+gower6
+tsne_obj6 <- Rtsne(gower6, is_distance = TRUE, perplexity = 3)
+
+tsne_data6 <- tsne_obj6$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit6$clustering),
+             feature1  = df_cnt6$IC,
+             feature2  = df_cnt6$union,
+             feature3  = df_cnt6$ER200_1,
+             feature4  = df_cnt6$ER200_2,
+             feature5  = df_cnt6$ER207_1,
+             feature6  = df_cnt6$ER207_2,
+             feature7  = df_cnt6$ER207_3,
+             feature8  = df_cnt6$ER207_4,
+             feature9 = df_cnt6$ER207_5,
+             feature10 = df_cnt6$ER207_6,
+             feature11 = df_cnt6$ER207_8,
+             feature12 = df_cnt6$ER151_3,
+             feature13 = df_cnt6$ER151_4,
+             country = countrylist)
+
+tsne_data6
+
+plot_imp6 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data6) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 6", x = 'Dimension 1', y = "Dimension 2")
+
+plot_imp6
+
+###############################################################################
+# Cluster analysis imputation 7
+###############################################################################
+set.seed(123)
+pam_fit7 <- pam(gower7, diss = TRUE, k = 2)
+pam_fit7
+
+# Check mediods
+df_cnt7[pam_fit7$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt7$cluster <- as.ordered(pam_fit7$clustering)
+class(df_cnt7$cluster)
+
+# Visualizing clustering
+plot(pam_fit7)
+
+gower7
+tsne_obj7 <- Rtsne(gower7, is_distance = TRUE, perplexity = 3)
+
+tsne_data7 <- tsne_obj7$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit7$clustering),
+             feature1  = df_cnt7$IC,
+             feature2  = df_cnt7$union,
+             feature3  = df_cnt7$ER200_1,
+             feature4  = df_cnt7$ER200_2,
+             feature5  = df_cnt7$ER207_1,
+             feature6  = df_cnt7$ER207_2,
+             feature7  = df_cnt7$ER207_3,
+             feature8  = df_cnt7$ER207_4,
+             feature9 = df_cnt7$ER207_5,
+             feature10 = df_cnt7$ER207_6,
+             feature11 = df_cnt7$ER207_8,
+             feature12 = df_cnt7$ER151_3,
+             feature13 = df_cnt7$ER151_4,
+             country = countrylist)
+
+tsne_data7
+
+plot_imp7 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data7) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 7", x = 'Dimension 1', y = "Dimension 2")
+
+plot_imp7
+
+###############################################################################
+# Cluster analysis imputation 8
+###############################################################################
+set.seed(123)
+pam_fit8 <- pam(gower8, diss = TRUE, k = 3)
+pam_fit8
+
+# Check mediods
+df_cnt8[pam_fit8$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt8$cluster <- as.ordered(pam_fit8$clustering)
+class(df_cnt8$cluster)
+
+# Visualizing clustering
+plot(pam_fit8)
+
+gower8
+tsne_obj8 <- Rtsne(gower8, is_distance = TRUE, perplexity = 3)
+
+tsne_data8 <- tsne_obj8$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit8$clustering),
+             feature1  = df_cnt8$IC,
+             feature2  = df_cnt8$union,
+             feature3  = df_cnt8$ER200_1,
+             feature4  = df_cnt8$ER200_2,
+             feature5  = df_cnt8$ER207_1,
+             feature6  = df_cnt8$ER207_2,
+             feature7  = df_cnt8$ER207_3,
+             feature8  = df_cnt8$ER207_4,
+             feature9 = df_cnt8$ER207_5,
+             feature10 = df_cnt8$ER207_6,
+             feature11 = df_cnt8$ER207_8,
+             feature12 = df_cnt8$ER151_3,
+             feature13 = df_cnt8$ER151_4,
+             country = countrylist)
+
+tsne_data8
+
+plot_imp8 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data8) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 8", x = 'Dimension 1', y = "Dimension 2")
+
+plot_imp8      
+
+      
+###############################################################################
+# Cluster analysis imputation 9
+###############################################################################
+set.seed(123)
+pam_fit9 <- pam(gower9, diss = TRUE, k = 2)
+pam_fit9
+
+# Check mediods
+df_cnt9[pam_fit9$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt9$cluster <- as.ordered(pam_fit9$clustering)
+class(df_cnt9$cluster)
+
+# Visualizing clustering
+plot(pam_fit9)
+
+gower9
+tsne_obj9 <- Rtsne(gower9, is_distance = TRUE, perplexity = 3)
+
+tsne_data9 <- tsne_obj9$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit9$clustering),
+             feature1  = df_cnt9$IC,
+             feature2  = df_cnt9$union,
+             feature3  = df_cnt9$ER200_1,
+             feature4  = df_cnt9$ER200_2,
+             feature5  = df_cnt9$ER207_1,
+             feature6  = df_cnt9$ER207_2,
+             feature7  = df_cnt9$ER207_3,
+             feature8  = df_cnt9$ER207_4,
+             feature9 = df_cnt9$ER207_5,
+             feature10 = df_cnt9$ER207_6,
+             feature11 = df_cnt9$ER207_8,
+             feature12 = df_cnt9$ER151_3,
+             feature13 = df_cnt9$ER151_4,
+             country = countrylist)
+
+tsne_data9
+
+plot_imp9 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data9) +
+  geom_point(aes(shape = cluster), size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 9", x = 'Dimension 1', y = "Dimension 2")
+
+plot_imp9
+
+###############################################################################
+# Cluster analysis imputation 10
+###############################################################################
+set.seed(123)
+pam_fit10 <- pam(gower10, diss = TRUE, k = 2)
+pam_fit10
+
+# Check mediods
+df_cnt10[pam_fit10$medoids, ]
+
+# Adding cluster to dataframe
+df_cnt10$cluster <- as.ordered(pam_fit10$clustering)
+class(df_cnt10$cluster)
+
+# Visualizing clustering
+plot(pam_fit10)
+
+gower10
+tsne_obj10 <- Rtsne(gower10, is_distance = TRUE, perplexity = 3)
+
+tsne_data10 <- tsne_obj10$Y %>%
+      data.frame() %>%
+      setNames(c("X", "Y")) %>%
+      mutate(cluster = factor(pam_fit10$clustering),
+             feature1  = df_cnt10$IC,
+             feature2  = df_cnt10$union,
+             feature3  = df_cnt10$ER200_1,
+             feature4  = df_cnt10$ER200_2,
+             feature5  = df_cnt10$ER207_1,
+             feature6  = df_cnt10$ER207_2,
+             feature7  = df_cnt10$ER207_3,
+             feature8  = df_cnt10$ER207_4,
+             feature9 = df_cnt10$ER207_5,
+             feature10 = df_cnt10$ER207_6,
+             feature11 = df_cnt10$ER207_8,
+             feature12 = df_cnt10$ER151_3,
+             feature13 = df_cnt10$ER151_4,
+             country = countrylist)
+
+tsne_data10
+
+plot_imp10 <- ggplot(aes(x = X, y = Y, label = country), data = tsne_data10) +
+  geom_point(aes(shape = cluster),size = 3) +
+  geom_label_repel(aes(label = country), 
+                   label.size = NA,
+                   fill = NA,
+                   nudge_x = 1) +
+  labs(title = "Imputation 10", x = 'Dimension 1', y = "Dimension 2") +
+  ylim(-80, 80)
+
+plot_imp10
+
+###############################################################################
+# Compare clustering outcomes
+###############################################################################
+
+#create dataset with countries and cluster per imputation
+df_cluster <- data.frame(matrix(ncol = 0, nrow = 10))
+df_cluster$Country <- tsne_data1$country
+df_cluster$Imputation_1 <- tsne_data1$cluster
+df_cluster$Imputation_2 <- tsne_data2$cluster
+df_cluster$Imputation_3 <- tsne_data3$cluster
+df_cluster$Imputation_4 <- tsne_data4$cluster
+df_cluster$Imputation_5 <- tsne_data5$cluster
+df_cluster$Imputation_6 <- tsne_data6$cluster
+df_cluster$Imputation_7 <- tsne_data7$cluster
+df_cluster$Imputation_8 <- tsne_data8$cluster
+df_cluster$Imputation_9 <- tsne_data9$cluster
+df_cluster$Imputation_10 <- tsne_data10$cluster
+df_cluster
+
+# output apa table
+nice_table(df_cluster)
+
+# plot all visualisations of the clustering
+plot_imp1
+ggsave("plot_imp1.eps")
+plot_imp2
+ggsave("plot_imp2.eps")
+plot_imp3
+ggsave("plot_imp3.eps")
+plot_imp4
+ggsave("plot_imp4.eps")
+plot_imp5
+ggsave("plot_imp5.eps")
+plot_imp6
+ggsave("plot_imp6.eps")
+plot_imp7
+ggsave("plot_imp7.eps")
+plot_imp8
+ggsave("plot_imp8.eps")
+plot_imp9
+ggsave("plot_imp9.eps")
+plot_imp10
+ggsave("plot_imp10.eps")
