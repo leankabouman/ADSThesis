@@ -1,0 +1,391 @@
+##############################################################################
+# ADS Thesis
+# Leanka Bouman
+# 5982111
+###############################################################################
+# Opening packages
+# Data exploration
+# Descriptives before missings treatment
+###############################################################################
+
+# Set working directory
+setwd('/Users/leanka/Documents/ADS/Thesis/thesis_analyses')
+
+###############################################################################
+# Installing and loading required packages
+###############################################################################
+
+# Opening dta files
+library(haven)
+library(dplyr)
+library(ggplot2)
+library(foreign)
+library(tidyverse)
+
+# Group by statistics
+#install.packages('data.table')
+library(data.table)
+
+#package for polychoric correlations and PCA
+#install.packages("psych")
+library(psych)
+
+# package for replacing values with NA
+#install.packages("naniar")
+library(naniar)
+
+# Package for showing multiple plots at once
+#install.packages('devtools')
+library(devtools)
+#install.packages('ggpubr')
+library(ggpubr)
+
+# package for missings pattern
+library(mice)
+
+# package for random forest mice imputation
+#install.packages("lattice")
+library(lattice)
+#install.packages("CALIBERrfimpute")
+library(CALIBERrfimpute)
+
+# showing screeplot of prcomp
+#install.packages("factoextra")
+library(factoextra)
+
+#removing labels from variables
+#install.packages('labelled')
+library(labelled)
+
+#Package for frequency table
+#install.packages('epiDisplay')
+library(epiDisplay)
+
+# APA dataframes
+#devtools::install_github("rempsyc/rempsyc", force = TRUE)
+library(rempsyc)
+
+# Package for PAM
+library(cluster)
+
+# Visualisation of clustering
+#install.packages('Rtsne')
+library(Rtsne)
+
+# APA tables
+#install.packages('apaTables')
+library(apaTables)
+
+###############################################################################
+# Opening ECS data 2009
+###############################################################################
+
+# Data 2009
+data_09 <- read_dta("ecs2009_20091001_ef.dta")
+
+###############################################################################
+# Exploring the data
+###############################################################################
+
+# Variable names
+names(data_09)
+
+# How many observations with ER interview
+table(data_09$ERint)
+
+# Amount of observations per country
+table(data_09$country2)
+
+###############################################################################
+# Data selection
+###############################################################################
+
+# Only data with ER interview
+data_er_mm <- data_09[ which(data_09$ERint == 1),]
+
+# Only data of transition countries
+data_trans <- data_er_mm[ which(data_er_mm$country2 %in% c(2, 3, 6, 13, 14, 16, 
+                                                           20, 22, 23, 24)), ]
+
+###############################################################################
+# Descriptives on country observations
+###############################################################################
+
+data_trans %>%
+      group_by(country2) %>%
+      summarise(x = n())
+
+###############################################################################
+# Create lists with variables
+###############################################################################
+
+vars_info <- c("ER200_1", "ER200_2")
+vars_dec <- c("ER207_1", "ER207_2", "ER207_3", "ER207_4", "ER207_5",
+              "ER207_6", "ER207_8")
+vars_att <- c("ER151_3", "ER151_4")
+vars <- c("ER200_1", "ER200_2", 
+          "ER207_1", "ER207_2", "ER207_3", "ER207_4", "ER207_5", 
+          "ER207_6", "ER207_8",
+          "ER151_3", "ER151_4")
+
+###############################################################################
+# Vriables on I&C bodies and Unions
+###############################################################################
+
+# Descriptives MM650_1 (union)
+summary(data_trans$MM650_1)
+sd(data_trans$MM650_1)
+length(data_trans$MM650_1)
+# 1 = union
+# 2 & 3 = no union
+# No missings
+
+# Creating new variable union where 1 = Union and 0 = no union
+data_trans$union <- ifelse(data_trans$MM650_1 == 1, 1, 
+                           ifelse(data_trans$MM650_1 == 2 | data_trans$MM650_1 == 3, 0, 
+                                  NA))
+
+# Descriptives new variable union
+summary(data_trans$union)
+
+# Descriptives MM650_2 (employee representation) & MM650_3 (works council)
+summary(data_trans$MM650_2)
+summary(data_trans$MM650_3)
+# 1 = present
+# 2&3 = not present
+# Big amount of missings. 
+# Due to the question not being asked in certain countries?
+
+# Check the missings MM650_2 grouped by country
+data_trans %>%
+      group_by(country2) %>%
+      summarise(sumNA = sum(is.na(MM650_2)))
+# Only missings for hungary
+# This question was only asked to non-public companies
+
+# Check if this is really the case
+hungary <- data_trans[ which(data_trans$country2 == 16), ]
+hungary %>%
+      group_by(MM104) %>%
+      summarise(sumNA = sum(is.na(MM650_2)))
+# All missings are caused by respondents not being asked the question
+# Missings can be set to 0
+
+# Check the missings MM650_3 grouped by country
+data_trans %>%
+      group_by(country2) %>%
+      summarise(sumNA = sum(is.na(MM650_3)))
+# Missings for countries where this question was not asked
+# Missings for hungary, as question was only for public companies
+
+# Check if this is really the case
+hungary %>%
+      group_by(MM104) %>%
+      summarise(sumNA = sum(is.na(MM650_3)))
+# All missings are caused by respondents not being asked the question
+# Missings can be set to 0
+
+# Set missings MM650_2 and MM650_3 to zero
+data_trans <- mutate_at(data_trans, c('MM650_2', 'MM650_3'), 
+                        ~replace(., is.na(.), 3))
+summary(data_trans$MM650_2)
+sd(data_trans$MM650_2)
+summary(data_trans$MM650_3)
+sd(data_trans$MM650_3)
+
+# Creating new variable where 1 = ER and/or WC and 0 = no ER or WC
+data_trans$IC <- ifelse(data_trans$MM650_2 == 1 | data_trans$MM650_3 == 1, 1,
+                        ifelse((data_trans$MM650_2 == 2 & data_trans$MM650_3 == 2) |
+                                     (data_trans$MM650_2 == 2 & data_trans$MM650_3 == 3) |
+                                     (data_trans$MM650_2 == 3 & data_trans$MM650_3 == 2) |
+                                     (data_trans$MM650_2 == 3 & data_trans$MM650_3 == 3), 0, 
+                               NA))
+
+# Descriptives new variable IC
+summary(data_trans$IC)
+
+###############################################################################
+# Descriptives of countries
+###############################################################################
+
+# Occurences of each country
+data_trans %>% group_by(country2) %>% summarise(count=n())
+
+###############################################################################
+# Descriptives and wrangeling of variables on rights ER
+###############################################################################
+
+# Descriptives information rights
+summary(data_trans[, c(vars_info)])
+# 5 point lickert scale
+# 1 = information at least once a month
+# 5 = never
+# 6 = no answer/missing
+
+# Changing values for missing data to NA
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = c(vars_info),
+                         condition = ~.x == 6)
+
+summary(data_trans[, c(vars_info)])
+sapply(data_trans[c(vars_info)], sd, na.rm = TRUE)
+
+# Variables on co-decision and consultation right
+summary(data_trans[, c(vars_dec)])
+# 4 point lickert scale
+# 1 = influence is very strong
+# 4 = influence is very weak
+# 5 = no answer/missing
+
+# Changing values for missing data to NA
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = c(vars_dec),
+                         condition = ~.x == 5)
+
+summary(data_trans[, c(vars_dec)])
+sapply(data_trans[c(vars_dec)], sd, na.rm = TRUE)
+
+
+###############################################################################
+# Descriptives and wrangeling of variables on attitudes from ER on working with MM
+###############################################################################
+
+summary(data_trans[,c(vars_att)])
+# 1 = strongly agree, 5 = strongly disagree, 6 = missing
+
+# Changing values for missing data to NA
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = c(vars_att),
+                         condition = ~.x == 6)
+
+summary(data_trans[,c(vars_att)])
+sapply(data_trans[c(vars_att)], sd, na.rm = TRUE)
+
+# Grouping amount of missings per certain variables
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER200_1)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER200_2)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_1)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_2)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_3)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_4)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_5)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_6)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER207_8)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER151_3)) / n()))
+
+df %>%
+  group_by(country2) %>%
+  summarise(NA_sum = (sum(is.na(ER151_4)) / n()))
+
+###############################################################################
+# Descriptives of other variables to use for data imputation 
+###############################################################################
+
+# Company size in 10 categories
+summary(data_trans$size_10)
+# No missings
+
+# Sector of activity (production, public services, private services)
+summary(data_trans$sec3)
+# No missings
+
+# Receiving info timely
+summary(data_trans$ER203)
+# 3 = missing
+# Changing values for missing data to NA
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = 'ER203',
+                         condition = ~.x == 3)
+summary(data_trans$ER203)
+
+# ER's get trainig
+summary(data_trans$ER304)
+# 3 = missing
+# Changing values for missing data to NA
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = 'ER304',
+                         condition = ~.x == 3)
+summary(data_trans$ER304)
+
+# 
+summary(data_trans$ER501)
+data_trans <- data_trans %>%
+      replace_with_na(replace = list("ER501" = 99))
+summary(data_trans$ER501)
+
+summary(data_trans$ER202)
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = c("ER202"),
+                         condition = ~.x == 4)
+
+summary(data_trans[,c("ER151_1", "ER151_2")])
+data_trans <- data_trans %>%
+      replace_with_na_at(.vars = c("ER151_1", "ER151_2"),
+                         condition = ~.x == 6)
+
+summary(data_trans[,c("ER151_1", "ER151_2", "ER202", "ER203", "ER304", "ER501")])
+
+# Correlations with other predictor variables
+cor(data_trans[, c(vars, "ER151_1", "ER151_2", "ER202", "ER203", "ER304", "ER501",
+                   "IC", "union", "sec3", "size_10")],
+    method = 'spearman', use='pairwise.complete')
+
+###############################################################################
+# Creating dataset with only variables to be used 
+###############################################################################
+
+df <- data_trans[, c('country2', #country variable
+                     'size_10', #company size
+                     'sec3', #sector of activity
+                     'ER501', "ER202",
+                     "ER151_1", "ER151_2", "ER203", "ER304",
+                     'union', #union binary
+                     'IC', #I&C body binary
+                     vars #information, influence, attitude variables
+)]
+
+summary(df)
+df <- as.data.frame(lapply(df, function(x )as.numeric(as.character(x))))
+
+sapply(df[,c(vars)], median, na.rm = TRUE)
+
+tab1(df$ER200_1)
+tab1(df$ER200_2)
+tab1(df$ER207_1)
+tab1(df$ER207_2)
+tab1(df$ER207_3)
+tab1(df$ER207_4)
+tab1(df$ER207_5)
+tab1(df$ER207_6)
+tab1(df$ER207_8)
+tab1(df$ER151_3)
+tab1(df$ER151_4)
